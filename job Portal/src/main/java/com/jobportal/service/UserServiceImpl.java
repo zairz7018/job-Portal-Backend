@@ -1,12 +1,14 @@
 package com.jobportal.service;
 
 import com.jobportal.dto.LoginDTO;
+import com.jobportal.dto.ResponseDto;
 import com.jobportal.dto.UserDTO;
 import com.jobportal.entity.OTP;
 import com.jobportal.entity.User;
 import com.jobportal.exception.JobPortalException;
 import com.jobportal.repository.OTPRepository;
 import com.jobportal.repository.UserRepository;
+import com.jobportal.utility.Data;
 import com.jobportal.utility.Utilities;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Boolean sendOtp(String email) throws Exception {
-        userRepository.findByEmail(email).orElseThrow(()->new JobPortalException("USER_NOT_FOUND"));
+        User user=userRepository.findByEmail(email).orElseThrow(()->new JobPortalException("USER_NOT_FOUND"));
         MimeMessage mm = mailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mm,true);
         message.setTo(email);
@@ -62,8 +64,23 @@ public class UserServiceImpl implements UserService{
         String genOtp = Utilities.generateOTP();
         OTP otp=new OTP(email,genOtp, LocalDateTime.now());
         otpRepository.save(otp);
-        message.setText("Your Code is  : "+genOtp , false);
+        message.setText(Data.getMessageBody(genOtp,user.getName()), true);
         mailSender.send(mm);
         return true;
+    }
+
+    @Override
+    public Boolean verifyOtp(String email, String otp) throws JobPortalException {
+        OTP otpEntity = otpRepository.findById(email).orElseThrow(()->new JobPortalException("OTP_NOT_FOUND"));
+        if(!otpEntity.getOtpCode().equals(otp))throw new JobPortalException("OTP_INCORRECT!");
+        return true;
+    }
+
+    @Override
+    public ResponseDto changePassword(LoginDTO loginDTO) throws JobPortalException {
+        User user=userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(()->new JobPortalException("USER_NOT_FOUND"));
+        user.setPassword(passwordEncoder.encode(loginDTO.getPassword()));
+        userRepository.save(user);
+            return new ResponseDto("Password changed successfully!");
     }
 }
