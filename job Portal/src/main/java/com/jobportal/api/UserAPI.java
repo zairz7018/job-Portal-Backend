@@ -1,6 +1,7 @@
 package com.jobportal.api;
 
 import com.jobportal.dto.LoginDTO;
+import com.jobportal.dto.ResponseDto;
 import com.jobportal.dto.UserDTO;
 import com.jobportal.exception.JobPortalException;
 import com.jobportal.service.UserService;
@@ -28,5 +29,10 @@ public class UserAPI {
     public ResponseEntity<UserDTO>loginUser(@RequestBody @Valid LoginDTO loginDTO) throws JobPortalException {
 
         return new ResponseEntity<>(userService.loginUser(loginDTO) , HttpStatus.OK);
+    }
+    @PostMapping("/sendOtp/{email}")
+    public ResponseEntity<ResponseDto>sendOtp(@PathVariable String email ) throws Exception {
+        userService.sendOtp(email);
+        return new ResponseEntity<>(new ResponseDto("OTP sent Successfully ."), HttpStatus.OK);
     }
 }
