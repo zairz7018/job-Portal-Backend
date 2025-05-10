@@ -22,6 +22,7 @@ public class Applicant {
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
+    private LocalDateTime interviewingTime;
 
     public ApplicantDTO toDTO() {
         return new ApplicantDTO(
@@ -33,7 +34,8 @@ public class Applicant {
                 this.resume != null ? Base64.getEncoder().encodeToString(this.resume) : null,
                 this.coverLetter,
                 this.timestamp,
-                this.applicationStatus
+                this.applicationStatus,
+                this.interviewingTime
         );
     }
 

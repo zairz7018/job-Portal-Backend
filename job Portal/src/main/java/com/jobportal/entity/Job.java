@@ -31,6 +31,7 @@ public class Job {
     private String description;
     private List<String> skillsRequired;
     private JobStatus jobStatus;
+    private Long postedBy;
     public JobDTO toDTO() {
         return new JobDTO(
                 this.id,
@@ -45,7 +46,8 @@ public class Job {
                 this.postTime,
                 this.description,
                 this.skillsRequired,
-                this.jobStatus // ❌ NE PAS METTRE DE VIRGULE ICI
+                this.jobStatus ,
+                this.postedBy// ❌ NE PAS METTRE DE VIRGULE ICI
         );
 
     }
