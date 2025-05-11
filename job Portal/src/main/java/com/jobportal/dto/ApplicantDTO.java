@@ -21,7 +21,7 @@ public class ApplicantDTO {
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
-    private LocalDateTime interviewingTime;
+    private LocalDateTime interviewTime;
 
     public Applicant toEntity(){
         return
@@ -35,7 +35,7 @@ public class ApplicantDTO {
                         this.coverLetter,
                         this.timestamp,
                         this.applicationStatus,
-                        this.interviewingTime
+                        this.interviewTime
                 );
     }
 }
