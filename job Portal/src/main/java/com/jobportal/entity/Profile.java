@@ -19,13 +19,14 @@ import java.util.List;
 public class Profile {
     @Id
     private Long id;
-    private String name ;
+    private String name;
     private String email;
     private String jobTitle;
     private String company;
     private String location;
     private String about;
     private byte[] picture;
+    private Long totalExp;
     private List<String> skills;
     private List<Experience>experiences;
     private List<Certification>certifications;
@@ -35,6 +36,7 @@ public class Profile {
                 this.email , this.jobTitle , this.company
         , this.location, this.about ,
                 this.picture!=null? Base64.getEncoder().encodeToString(this.picture):null ,
+                this.totalExp,
                 this.skills , this.experiences , this.certifications ,
                 this.savedJobs);}
 
