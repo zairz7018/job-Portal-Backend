@@ -1,6 +1,8 @@
 package com.jobportal.api;
 
+import com.jobportal.dto.ResponseDto;
 import com.jobportal.entity.Notification;
+import com.jobportal.exception.JobPortalException;
 import com.jobportal.service.NotificatioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,11 @@ public class NotificationApi {
     public ResponseEntity<List<Notification>>getNotifications(@PathVariable Long userId) {
         return new ResponseEntity<>(notificatioService.getUnreadNotifications(userId), HttpStatus.OK);
 
-
+    }
+    @PutMapping("/read/{id}")
+    public ResponseEntity<ResponseDto>readNotifications(@PathVariable Long id) throws JobPortalException {
+        notificatioService.readNotifications(id);
+        return new ResponseEntity<>(new ResponseDto("Success"), HttpStatus.OK);
 
     }
 }

@@ -29,4 +29,13 @@ public class NotificatioServiceImpl implements NotificatioService{
     public List<Notification> getUnreadNotifications(Long userId) {
         return notificationRepository.findByUserIdAndStatus(userId , NotificationStatus.UNREAD);
     }
+
+    @Override
+    public void readNotifications(Long id) throws JobPortalException {
+        Notification noti = notificationRepository.findById(id).orElseThrow(()->
+                new JobPortalException("No Notifications Found"));
+        noti.setStatus(NotificationStatus.READ);
+        notificationRepository.save(noti);
+
+    }
 }
