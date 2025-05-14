@@ -20,8 +20,8 @@ public class MyUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             UserDTO dto = userService.getUserByEmail(email);
-            return new CustomUserDetails(dto.getId(), dto.getEmail(),
-                    dto.getPassword(), dto.getAccountType()
+            return new CustomUserDetails(dto.getId(), email,dto.getName(),
+                    dto.getPassword(), dto.getProfileId() ,  dto.getAccountType()
             , new ArrayList<>());
         } catch (JobPortalException e) {
             throw new UsernameNotFoundException("Utilisateur non trouvé avec l'email: " + email, e);

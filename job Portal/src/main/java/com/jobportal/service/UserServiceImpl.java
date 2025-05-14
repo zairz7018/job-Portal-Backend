@@ -55,13 +55,19 @@ public class UserServiceImpl implements UserService{
         // 2. D'abord persister l'utilisateur
         userDTO.setId(Utilities.getNextSequence("users"));
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        User user = userRepository.save(userDTO.toEntity()); // ◀◀◀ Sauvegarde d'abord
+        User user = userRepository.save(userDTO.toEntity());
 
-        // 3. Maintenant créer le profil
-        userDTO.setProfileId(profileService.createProfile(user.getEmail())); // ◀◀◀ Email du user persisté
+        // 3. Créer le profil et lier le profileId
+        Long profileId = profileService.createProfile(user.getEmail());
+        user.setProfileId(profileId);
 
+        // 4. Sauvegarder à nouveau l'utilisateur avec le profileId
+        user = userRepository.save(user);
+
+        // 5. Retourner DTO mis à jour
         return user.toDTO();
     }
+
 
     @Override
     public UserDTO getUserByEmail(String email) throws JobPortalException {

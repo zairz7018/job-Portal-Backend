@@ -22,17 +22,28 @@ public class ProfileServiceImpl implements ProfileService{
     private UserRepository userRepository;
     @Override
     public Long createProfile(String email) throws JobPortalException {
+        // Récupérer l'utilisateur à partir de l'email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND"));
+
+        // Créer un nouveau profil
         Profile profile = new Profile();
         profile.setId(Utilities.getNextSequence("profiles"));
-//error name dosent show
         profile.setEmail(email);
+        profile.setName(user.getName());  // Ajouter le nom de l'utilisateur au profil
+
+        // Initialiser les autres champs du profil
         profile.setSkills(new ArrayList<>());
         profile.setExperiences(new ArrayList<>());
         profile.setCertifications(new ArrayList<>());
-        profileRepository.save(profile);
-        return profile.getId();
 
+        // Sauvegarder le profil
+        profileRepository.save(profile);
+
+        // Retourner l'ID du profil créé
+        return profile.getId();
     }
+
 
     @Override
     public ProfileDTO getProfile(Long id) throws JobPortalException {
